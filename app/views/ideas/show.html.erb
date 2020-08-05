@@ -1,0 +1,63 @@
+<div class="shadow-sm p-3 mb-5 bg-white rounded overflow-wrap">
+    <h1>
+        <span class="badge badge-pill badge-info">
+            <%= @idea.title %>
+        </span>
+    </h1>
+    <p class="shadow-none p-3 mb-5 bg-light rounded"><%= @idea.description %></p>
+    <div>
+    <%= link_to "Edit", edit_idea_path(@idea), class: 'btn btn-info' %>
+    <%= link_to "Delete", idea_path(@idea), 
+        method: :delete, 
+        class: 'btn btn-danger',
+        data: { confirm: "Are you sure?" } 
+    %>
+</div>
+<%= form_with(model: [@idea, @review], local: true) do |f| %>
+    <% if @review.errors.any? %>
+        <ul>
+            <% @review.errors.full_messages.each do |msg| %>
+                <li class="text-danger"><%= msg %></li>
+            <% end %>
+        </ul>
+    <% end %>
+
+    <div class="form-group">
+       <%= f.text_area(
+           :body,
+           cols: 50,
+           rows: 5,
+           placeholder: "What are your thoughts?",
+           class: "form-control"
+       )%>
+    </div>
+
+    <%= f.submit "Review", class: "btn-primary" %>
+
+<% end %>
+
+
+
+<ul class="list-group answer-list">
+    <% @reviews.each do |review| %>
+        <li class="list-group-item">
+            <p>
+                <%= review.body %>
+            </p>
+            <small>
+            
+             <%= link_to(
+                 "Delete",
+                 idea_review_path(@idea, review),
+                 method: :delete,
+                 data: {
+                     confirm: "Are you sure?"
+                 },
+                 class: "btn btn-danger btn-sm"
+             )%>
+            </small>
+
+            </p>
+        </li>
+    <% end %>
+</ul>
